@@ -1,0 +1,9 @@
+{
+    "token": "",
+    "us_news_channel_id": "",
+    "world_news_channel_id": "",
+    "us_news_limit": 5,
+    "world_news_limit": 5,
+    "us_news_post_timer": 1800,
+    "world_news_post_timer": 1800
+}
