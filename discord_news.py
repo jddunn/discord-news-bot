@@ -165,6 +165,7 @@ class NewsBot:
         # Gather results and check cache
         for i, (date, title) in enumerate(zip(dates, headlines)):
             results.append([date.text, title.text])
+        # Filter results for unique values by title and date
         results = [list(x) for x in set(tuple(x) for x in results)]
         if os.path.isfile("./data/cache_us_news.pkl"):
             same = True
@@ -327,9 +328,6 @@ class NewsBot:
             descr += "**" + data[i][1] + "**" + "\n" + "*" + data[i][0] + "*" + "\n"
             # descr += "\n------------------------------\n"
             descr += data[i][2].replace("www.", "") + "\n\n"
-            # descr += "\n------------------------------\n"
-            # descr += pickle_data[i][3]
-            # descr += "\n\t-\t\n"
             descr += data[i][3] + "\n"
         # Ensure descr is under 4096 chars for Discord form submission
         descr = descr[:4096]
@@ -368,9 +366,6 @@ class NewsBot:
             descr += "**" + data[i][1] + "**" + "\n" + "*" + data[i][0] + "*" + "\n"
             # descr += "\n------------------------------\n"
             descr += data[i][2].replace("www.", "") + "\n\n"
-            # descr += "\n------------------------------\n"
-            # descr += pickle_data[i][3]
-            # descr += "\n\t-\t\n"
             descr += data[i][3] + "\n"
         # Ensure descr is under 4096 chars for Discord form submission
         descr = descr[:4096]
@@ -437,7 +432,6 @@ class NewsBot:
         """
         # Wait 3 seconds before we make a Google request
         # to avoid getting blocked
-        # print("Googling link: ", q)
         time.sleep(3)
         headers = {
             "User-Agent": ua.random,
@@ -450,7 +444,6 @@ class NewsBot:
         }
         query = "+".join(query.split())
         url = "https://www.google.com/search?q=" + query
-        # print(query)
         r = requests.get(url, headers=headers)
         soup = BeautifulSoup(r.text, "html.parser")
         links = soup.find_all("div", "yuRUbf")
