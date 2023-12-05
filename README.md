@@ -6,9 +6,9 @@ A bot for Discord that scrapes Google News for US and world news for headlines. 
 
 The headlines, dates, and article summaries are posted to the Discord channel(s) specified in the config file as nicely formatted embeds.
 
-![](https://i.imgur.com/rVxCIYn.png | width=100)
+<img src="https://i.imgur.com/rVxCIYn.png" width="350">
 
-![](https://i.imgur.com/sOYfhb4.png | width=100)
+<img src="https://i.imgur.com/sOYfhb4.png" width="350">
 
 ## Technical notes
 
@@ -20,22 +20,25 @@ BERT summarization has limitations; the input length is limited to 512 tokens in
 
 ## Config / set-up
 
-- Create a virtual env or install the requirements directly:
+Create a virtual env or install the requirements directly:
 `pip install -r requirements.txt`
 
-- Modify these values in `config.json`:
+Modify these values in `config.json`:
 
-`token`: Your Discord bot token (from [https://discord.com/developers/applications/](https://discord.com/developers/applications/))
-`us_news_channel_id`: The channel ID to post US news to
-`world_news_channel_id`: The channel ID to post world news to
+- `token`: Your Discord bot token (from [https://discord.com/developers/applications/](https://discord.com/developers/applications/))
 
-- Create and invite the bot to your Discord server with an invite link like the one below (modify CLIENT_ID with your application / bot from the link above):
+- `us_news_channel_id`: The channel ID to post US news to
+
+- `world_news_channel_id`: The channel ID to post world news to
+
+Create and invite the bot to your Discord server with an invite link like the one below (modify CLIENT_ID with your application / bot from the link above):
 `https://discord.com/oauth2/authorize?client_id=CLIENT_ID&scope=bot&permissions=1099511627775`
 
 This invite link has permissions scope for **everything** that a bot can do. You probably will want to modify the permissions scope to only be able to view and post in channels (all that is necessary for this bot) for security.
 
-- Download the appropriate version of chromedriver for your machine setup from here: [https://chromedriver.chromium.org/downloads](https://chromedriver.chromium.org/downloads).
-Note: Logic for using [webdriver-manager library](https://pypi.org/project/webdriver-manager/) is commented out in the code. For me that library's Selenium instance wasn't able to work with the Discord bot, so I had to manually get Chromedriver. Included in the repository is the latest Chromedriver version (as of December 2023) for Windows already; you'll need to replace it with your appropriate version if you have an older Chrome version or are using Mac or Linux.
+Download the appropriate version of chromedriver for your machine setup from here: [https://chromedriver.chromium.org/downloads](https://chromedriver.chromium.org/downloads).
+
+Note: Logic for using [webdriver-manager library](https://pypi.org/project/webdriver-manager/) is commented out in the code. That library's Selenium instance wasn't able to work with the Discord bot, so we'll have to manually get Chromedriver.
 
 ## Running the bot
 
