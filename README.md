@@ -2,7 +2,7 @@
 
 ## Intro
 
-A bot for Discord that scrapes Google News for US and world news for headlines. The headlines are then searched for in Google, and the article texts are scraped with Selenium (with ChromeDriver using Chrome), then summarized (extractive summarization) with [BERT](https://huggingface.co/docs/transformers/model_doc/bert) using Hugging Face's transformer pipeline. Article contents are extracted from HTML using [Goose](https://github.com/grangier/python-goose).
+A bot for Discord that scrapes Google News for US and world news for headlines. The headlines are then searched for in Google to get the news links, which are scraped with Selenium (with ChromeDriver using Chrome), then summarized (extractive summarization) with [BERT](https://huggingface.co/docs/transformers/model_doc/bert) using Hugging Face's transformer pipeline. Article contents are extracted from HTML using [Goose](https://github.com/grangier/python-goose).
 
 The headlines, dates, and article summaries are posted to the Discord channel(s) specified in the config file as nicely formatted embeds.
 
@@ -12,7 +12,7 @@ The headlines, dates, and article summaries are posted to the Discord channel(s)
 
 ## Technical notes
 
-Headlines and dates of articles are saved in a local cache via pickle data (in two separate files for US and world news). The bot checks Google News on a looped timer, and if a headline or date is new (different than what's stored in the pickled cache), then it'll make new summaries and post to Discord. It's limited in that *any* difference in a single date or headline will result in the bot posting all the found headlines, so it's still possible to have repeated ones. 
+Headlines and dates of articles are saved in a local cache via pickle data (in two separate files for US and world news). The bot checks Google News on a looped timer, and if a headline is new (different than what's stored in the pickled cache), then it'll make new summaries and post to Discord. It's limited in that *any* difference in the headlines / titles list will result in the bot posting all news summaries, so it's still possible to have repeated ones. 
 
 You can use `bert-extractive-summarizer` (by calling `summarize_optimal` method in `_summarizer.py`), which optimally summarizes by clustering sentence embeddings (see paper: [https://arxiv.org/abs/1906.04165](https://arxiv.org/abs/1906.04165)). With this method you do not need to give a minimum / maximum length to BERT's model, as it calculates the optimal number of sentences in the summary. However, I was unable to get this library working asynchronously in the Discord task loop consistently, so this method is not used. In the future it'll probably be better to implement the paper's architecture in our own code instead of trying to use this library.
 
@@ -50,11 +50,10 @@ Note: Logic for using [webdriver-manager library](https://pypi.org/project/webdr
 
 If you want to use another custom model for summarization, you can modify which model and tokenizer to use at the top of the code in `_summarizer.py`.
 
-The Summarizer.summarize_optimal() method accepts two arguments, a string of text, and an optional int for max number of sentences to generate in the summary. The max sentence number is defaulted to `K_MAX` defined in `_summarizer.py`, which is currently set to 4. You can modify the summarizer to use this method in `discord_news.py` if you prefer.
+The (unused) Summarizer.summarize_optimal() method accepts two arguments, a string of text, and an optional int for max number of sentences to generate in the summary. The max sentence number is defaulted to `K_MAX` defined in `_summarizer.py`, which is currently set to 4. You can modify the summarizer to use this method in `discord_news.py` if you prefer. This method isn't used because that library has some issues with asynchronous processing while using Discord.py.
 
 ### Linting
 
 ```
-pip install black
 black .
 ```

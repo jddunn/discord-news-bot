@@ -8,13 +8,10 @@ from dateutil.parser import parse
 
 from bs4 import BeautifulSoup
 
-# import asyncio
-# import re
 import json
 
 from urllib.parse import urlparse
 
-# import itertools
 from operator import itemgetter
 
 # from tabulate import tabulate
@@ -49,7 +46,6 @@ from _summarizer import summarizer
 ua = UserAgent()
 g = goose.Goose()
 
-# Old options for Selenium below
 # Download appropriate version of Chromedriver from here:
 # https://chromedriver.chromium.org/downloads
 # and place in same directory as this script
@@ -107,7 +103,8 @@ class NewsBot:
     summaries to Discord channels defined in config.json.
 
     Results are cached in pickle files locally to avoid
-    redundant posts (only the top)
+    redundant posts (though some headlines can be repeated
+    still).
     """
 
     def __init__(self) -> None:
@@ -270,7 +267,6 @@ class NewsBot:
                 # Google the title of the news article to get the link and scrape that
                 link = self.google(title + " news")
                 print("Scrape: ", i, date, title, link)
-                # short_descr_summary = _summarizer.make_summary(descr.text)
                 self.driver.implicitly_wait(3)
                 # # Intercept requests and modify headers
                 self.driver.request_interceptor = driver_interceptor
@@ -282,10 +278,9 @@ class NewsBot:
                 body = body.cleaned_text
                 print("Cleaned text extracting from goose: ", body)
                 # self.driver.close()
-                # driver.close()
                 results.append([date, title, link, body])
             except Exception as e:
-                # driver.close()
+                # self.driver.close()
                 print("Err getting scrape for " + title + ": ", e)
                 pass
         print("Finished scrape: ", len(results))
