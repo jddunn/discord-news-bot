@@ -1,5 +1,5 @@
-# Note: We will not use the HF transformers pipeline directly,
-# but will instead use the library 'bert-extractive-summarizer',
+# Note: It would be ideal to not use the HF transformers pipeline
+# but instead use the library 'bert-extractive-summarizer',
 # which implements the architecture in this paper:
 # https://arxiv.org/ftp/arxiv/papers/1906/1906.04165.pdf.
 
@@ -7,10 +7,17 @@
 # and then uses a clustering algorithm to find the most representative
 # sentences in the text. This is a more robust approach than the
 # transformer pipeline, and will be better than specifying a specific
-# range of tokens / ratio of summarization to return.
+# range of tokens / ratio of summarization to return. This library uses
+# CUDA if compatible GPU if available by default, and requires pytorch.
+
+from summarizer import Summarizer  # Bert Summarizer
+
+model = Summarizer()
 
 # Transformers pipeline from HF will automatically detect
-# and use CUDA GPU if available
+# and use CUDA GPU if available. We use this model pipeline
+# in our news bot because it works without any asynchronous
+# processing errors with Discord.py, unlike the library above.
 
 from transformers import pipeline
 
@@ -22,12 +29,6 @@ bert_summarizer = pipeline(
 MIN_LENGTH = 0.1
 MAX_LENGTH = 0.25
 
-# The `bert-extractive-summarizer` library will use CUDA
-# GPU if available by default, and requires pytorch.
-
-from summarizer import Summarizer  # Bert Summarizer
-
-model = Summarizer()
 
 K_MAX = 4  # Max num of sentences in our cluster, to return in summary
 
